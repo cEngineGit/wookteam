@@ -77,12 +77,6 @@ grep 'temporary password' /var/log/mysqld.log
 yum install -y supervisor && systemctl enable supervisord && systemctl start supervisord
 ```
 
-## 安装NodeJs12
-
-```sh
-curl -sL https://rpm.nodesource.com/setup_12.x | sudo bash - && yum install -y nodejs
-```
-
 ## 安装git
 
 ```sh
@@ -144,9 +138,6 @@ DB_PASSWORD=Aa111111.
 composer install
 php artisan key:generate
 php artisan migrate --seed
-
-npm install
-npm run production
 ```
 
 ### 创建Supervisor进程
@@ -267,12 +258,9 @@ cd /var/www/wookteam/
 git fetch --all
 git reset --hard origin/master
 git pull
+
 composer update
 php artisan migrate
-
-npm install
-npm run production
-
 systemctl restart supervisord
 ```
 

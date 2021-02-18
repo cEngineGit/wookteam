@@ -13,21 +13,21 @@
 #### 1. Clone the project to your local or server
 
 ```bash
-// using ssh
+# using ssh
 git clone git@github.com:kuaifan/wookteam.git
-// or you can use https
+# or you can use https
 git clone https://github.com/kuaifan/wookteam.git
 
-// enter directory
+# enter directory
 cd wookteam
 
-// copy .env
+# copy .env
 cp .env.example .env
 ```
 
 #### 2. Modify`.env`
 
-> Database、WebSocket
+> Database...
 
 ```env
 DB_CONNECTION=mysql
@@ -50,9 +50,6 @@ git pull origin master # use dev branch for local development
 composer install
 php artisan key:generate
 php artisan migrate --seed
-
-npm install
-npm run production
 ```
 
 #### 4. Run Laravels (WebSocket)
@@ -156,11 +153,8 @@ server {
 git fetch --all
 git reset --hard origin/master
 git pull
+
 composer update
 php artisan migrate
-
-npm install
-npm run production
-
 php bin/laravels start # If use Supervisord restart Supervisord
 ```

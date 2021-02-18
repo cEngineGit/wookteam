@@ -13,21 +13,21 @@
 #### 1、克隆项目到您的本地或服务器
 
 ```bash
-// 使用ssh
+# 使用ssh
 git clone git@github.com:kuaifan/wookteam.git
-// 或者你也可以使用https
+# 或者你也可以使用https
 git clone https://github.com/kuaifan/wookteam.git
 
-// 进入目录
+# 进入目录
 cd wookteam
 
-// 拷贝 .env
+# 拷贝 .env
 cp .env.example .env
 ```
 
 #### 2、修改`.env`
 
-> 数据库信息、WebSocket
+> 数据库等信息
 
 ```env
 DB_CONNECTION=mysql
@@ -50,9 +50,6 @@ git pull origin master # 如果使用dev分支进行本地开发
 composer install
 php artisan key:generate
 php artisan migrate --seed
-
-npm install
-npm run production
 ```
 
 #### 4、运行 Laravels (WebSocket)
@@ -156,12 +153,9 @@ server {
 git fetch --all
 git reset --hard origin/master
 git pull
+
 composer update
 php artisan migrate
-
-npm install
-npm run production
-
 php bin/laravels start # 如果使用Supervisord则重启Supervisord
 ```
 

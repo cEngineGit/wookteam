@@ -19,7 +19,6 @@
 - Nginx
 - MySQL-5.7+
 - PHP-7.3+
-- PM2管理器
 
 安装完以后打开`PHP`设置安装`fileinfo`、`Swoole4`扩展及删除禁用函数`pcntl`、`putenv`、`proc_open`、`popen`。
 
@@ -109,12 +108,7 @@ cd /www/wwwroot/wookteam.com
 composer install
 php artisan key:generate
 php artisan migrate --seed
-
-npm install
-npm run production
 ```
-
-> 如果提示`npm: command not found`请重启服务器或者运行`source ~/.bash_profile`后再试
 
 ### 5、安装配置Supervisor
 
@@ -164,9 +158,5 @@ systemctl restart supervisord
 ```bash
 composer update
 php artisan migrate
-
-npm install
-npm run production
-
 systemctl restart supervisord
 ```
