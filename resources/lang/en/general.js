@@ -639,4 +639,5 @@ export default {
     "项目总任务数": "The total number of project tasks",
     "项目已完成数": "Number of projects have been completed",
     "项目未完成数": "The number of unfinished projects",
+    "发送日期": "Send date",
 }

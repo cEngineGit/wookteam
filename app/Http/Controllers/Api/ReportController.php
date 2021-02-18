@@ -107,7 +107,13 @@ class ReportController extends Controller
                     unset($ccuser[$ck]);
                     continue;
                 }
-                DB::table('report_ccuser')->updateOrInsert(['rid' => $reportDetail['id'], 'username' => $cuser], ['cc' => 1]);
+                DB::table('report_ccuser')->updateOrInsert([
+                    'rid' => $reportDetail['id'],
+                    'username' => $cuser,
+                    'indate' => Base::time()
+                ], [
+                    'cc' => 1
+                ]);
             }
             DB::table('report_lists')->where('id', $reportDetail['id'])->update([
                 'status' => '已发送',
@@ -158,7 +164,13 @@ class ReportController extends Controller
                         unset($ccuserArr[$ck]);
                         continue;
                     }
-                    DB::table('report_ccuser')->updateOrInsert(['rid' => $reportDetail['id'], 'username' => $cuser], ['cc' => 1]);
+                    DB::table('report_ccuser')->updateOrInsert([
+                        'rid' => $reportDetail['id'],
+                        'username' => $cuser,
+                        'indate' => Base::time()
+                    ], [
+                        'cc' => 1
+                    ]);
                 }
                 $reportDetail['status'] = '已发送';
             }
@@ -261,10 +273,11 @@ class ReportController extends Controller
             if ($indate[1] > 0) $whereArray[] = ['indate', '<=', Base::dayTimeE($indate[1])];
         }
         //
-        $orderBy = '`id` DESC';
+        $orderBy = '`indate` DESC,`id` DESC';
         $sorts = Base::json2array(Request::input('sorts'));
         if (in_array($sorts['order'], ['asc', 'desc'])) {
             switch ($sorts['key']) {
+                case 'date':
                 case 'indate':
                     $orderBy = '`' . $sorts['key'] . '` ' . $sorts['order'] . ',`id` DESC';
                     break;
@@ -323,24 +336,28 @@ class ReportController extends Controller
             if ($indate[1] > 0) $whereArray[] = ['report_lists.indate', '<=', Base::dayTimeE($indate[1])];
         }
         //
-        $orderBy = '`id` DESC';
+        $builder = DB::table('report_lists')
+            ->join('report_ccuser', 'report_lists.id', '=', 'report_ccuser.rid')
+            ->select(['report_lists.*', 'report_ccuser.indate as senddate'])
+            ->where($whereArray);
         $sorts = Base::json2array(Request::input('sorts'));
         if (in_array($sorts['order'], ['asc', 'desc'])) {
             switch ($sorts['key']) {
                 case 'title':
                 case 'username':
+                    $builder->orderBy($sorts['key'], $sorts['order']);
+                    break;
                 case 'indate':
-                    $orderBy = '`' . $sorts['key'] . '` ' . $sorts['order'] . ',`id` DESC';
+                    $builder->orderBy('report_ccuser.indate', $sorts['order']);
                     break;
             }
+        } else {
+            $builder->orderByDesc('report_ccuser.indate');
+            $builder->orderByDesc('report_ccuser.id');
         }
         //
-        $lists = DB::table('report_lists')
-            ->join('report_ccuser', 'report_lists.id', '=', 'report_ccuser.rid')
-            ->select(['report_lists.*'])
-            ->where($whereArray)
-            ->orderByRaw($orderBy)
-            ->paginate(Base::getPaginate(100, 20));
+        $builder->orderByDesc('date');
+        $lists = $builder->paginate(Base::getPaginate(100, 20));
         $lists = Base::getPageList($lists);
         if ($lists['total'] == 0) {
             return Base::retError('未找到任何相关的汇报', $lists);
@@ -367,6 +384,7 @@ class ReportController extends Controller
         $rid = DB::table('report_ccuser')
             ->join('report_lists', 'report_lists.id', '=', 'report_ccuser.rid')
             ->where('report_lists.username', $user['username'])
+            ->orderByDesc('report_ccuser.id')
             ->value('rid');
         if (empty($rid)) {
             return Base::retError('没有相关数据！');

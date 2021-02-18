@@ -125,13 +125,13 @@
                     "maxWidth": 120,
                     "align": 'center',
                 }, {
-                    "title": this.$L("创建日期"),
+                    "title": this.$L("发送日期"),
                     "minWidth": 160,
                     "maxWidth": 200,
                     "align": 'center',
                     "sortable": true,
                     render: (h, params) => {
-                        return h('span', $A.formatDate("Y-m-d H:i:s", params.row.indate));
+                        return h('span', params.row.senddate ? $A.formatDate("Y-m-d H:i:s", params.row.senddate) : '-');
                     }
                 }, {
                     "title": " ",
