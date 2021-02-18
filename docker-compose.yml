@@ -3,7 +3,9 @@ version: '3'
 services:
   php:
     hostname: php
-    image: "kuaifan/wookteam"
+    build:
+      context: docker
+      dockerfile: php.Dockerfile
     volumes:
       - ./docker/php.conf:/etc/supervisor/conf.d/php.conf
       - ./docker/log/supervisor:/var/log/supervisor
