@@ -14,7 +14,9 @@ class UsersTableSeeder extends Seeder
     {
 
 
-        \DB::table('users')->delete();
+        if (\DB::table('users')->count() > 0) {
+            return;
+        }
 
         \DB::table('users')->insert(array (
             0 =>
@@ -30,13 +32,13 @@ class UsersTableSeeder extends Seeder
                 'encrypt' => 'OHsJ88',
                 'userpass' => '3dd0e69a6da5b87a9de356cc8f22a1e3',
                 'bgid' => 1,
-                'loginnum' => 353,
+                'loginnum' => 0,
                 'lastip' => '127.0.0.1',
-                'lastdate' => 1591343855,
+                'lastdate' => time(),
                 'lineip' => '127.0.0.1',
-                'linedate' => 1591343909,
+                'linedate' => time(),
                 'regip' => '127.0.0.1',
-                'regdate' => 1589072625,
+                'regdate' => time(),
                 'setting' => '{\\"version\\":1}',
             ),
             1 =>
@@ -52,13 +54,13 @@ class UsersTableSeeder extends Seeder
                 'encrypt' => 'AA1lsv',
                 'userpass' => '80c515b27ae42470a7c90e59586caaab',
                 'bgid' => 1,
-                'loginnum' => 345,
+                'loginnum' => 0,
                 'lastip' => '127.0.0.1',
-                'lastdate' => 1591342690,
+                'lastdate' => time(),
                 'lineip' => '127.0.0.1',
-                'linedate' => 1591343157,
+                'linedate' => time(),
                 'regip' => '127.0.0.1',
-                'regdate' => 1589072625,
+                'regdate' => time(),
                 'setting' => '{\\"version\\":1}',
             ),
         ));

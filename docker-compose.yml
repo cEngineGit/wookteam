@@ -1,8 +1,27 @@
 version: '3'
 
 services:
+  php:
+    hostname: php
+    image: "kuaifan/wookteam"
+    volumes:
+      - ./docker/php.conf:/etc/supervisor/conf.d/php.conf
+      - ./docker/log/supervisor:/var/log/supervisor
+      - ./docker/php.ini:/usr/local/etc/php/php.ini
+      - ./:/var/www
+    environment:
+      TZ: "Asia/Shanghai"
+      LANG: "C.UTF-8"
+    links:
+      - redis
+      - mariadb
+    depends_on:
+      - redis
+      - mariadb
+    restart: unless-stopped
+
   nginx:
-    image: nginx
+    image: "nginx:alpine"
     ports:
       - "${APP_PORT}:80"
       - "${APP_PORT_SSL}:443"
@@ -15,27 +34,18 @@ services:
       - php
     restart: unless-stopped
 
-  php:
-    hostname: php
-    build:
-      context: .
-      dockerfile: docker/php.Dockerfile
+  redis:
+    hostname: redis
+    image: "redis:alpine"
     volumes:
-      - ./docker/wookteam.conf:/etc/supervisor/conf.d/wookteam.conf
-      - ./docker/log/supervisor:/var/log/supervisor
-      - ./docker/php.ini:/usr/local/etc/php/php.ini
-      - ./:/var/www
+      - ./docker/redis:/data
     environment:
       TZ: "Asia/Shanghai"
-    links:
-      - mariadb
-    depends_on:
-      - mariadb
+    restart: unless-stopped
 
   mariadb:
     hostname: mariadb
     image: "bitnami/mariadb"
-    user: root
     volumes:
       - ./docker/mariadb:/bitnami/mariadb
     environment:
@@ -43,4 +53,4 @@ services:
       - "MARIADB_DATABASE=${DB_DATABASE}"
       - "MARIADB_USER=${DB_USERNAME}"
       - "MARIADB_PASSWORD=${DB_PASSWORD}"
-    restart: always
+    restart: unless-stopped

@@ -10,40 +10,29 @@
 
 > `Docker` & `Docker Compose` must be installed
 
-#### 1. Clone the repository
+
+### Deployment project
 
 ```bash
-// using ssh
+# 1、Clone the repository
+
+# using ssh
 git clone git@github.com:kuaifan/wookteam.git
-// or you can use https
+# or you can use https
 git clone https://github.com/kuaifan/wookteam.git
 
-// enter directory
+# enter directory
 cd wookteam
 
-// copy .env
-cp .env.docker .env
+# 3、Build project
+./cmd install
 ```
-
-#### 2. Build image & install
-
-```bash
-./cmd composer install
-./cmd artisan key:generate
-./cmd artisan migrate --seed
-./cmd php bin/wookteam --port=8080 --ssl=4433
-./cmd up -d
-./cmd npm install
-./cmd npm run prod
-./cmd restart
-```
-
-Installed, project url: **`http://IP:PORT`** (`PORT` is the parameter `8080` in the build).
+Installed, project url: **`http://IP:PORT`**（`PORT`Default is`8000`）。
 
 ### Change port
 
 ```bash
-./cmd php bin/wookteam --port=8080 --ssl=4433
+./cmd php bin/wookteam --port=8000 --ssl=44300
 ./cmd up -d
 ```
 
@@ -83,17 +72,7 @@ Installed, project url: **`http://IP:PORT`** (`PORT` is the parameter `8080` in 
 
 **Note: Please backup your data before upgrading!**
 
-- Go to the directory and run the following commands in turn:
-
 ```bash
-git fetch --all
-git reset --hard origin/master
-git pull
-./cmd composer update
-./cmd artisan migrate
-
-./cmd npm install
-./cmd npm run prod
-
-./cmd restart
+# Enter directory and run command
+./cmd update
 ```

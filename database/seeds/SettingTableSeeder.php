@@ -12,12 +12,14 @@ class SettingTableSeeder extends Seeder
      */
     public function run()
     {
-        
 
-        \DB::table('setting')->delete();
-        
+
+        if (\DB::table('setting')->count() > 0) {
+            return;
+        }
+
         \DB::table('setting')->insert(array (
-            0 => 
+            0 =>
             array (
                 'id' => 1,
                 'title' => 'system',
@@ -25,7 +27,7 @@ class SettingTableSeeder extends Seeder
                 'setting' => '{\\"reg\\":\\"open\\",\\"github\\":\\"show\\",\\"logo\\":\\"\\"}',
             ),
         ));
-        
-        
+
+
     }
 }

@@ -10,40 +10,29 @@
 
 > 必须安装 `Docker` 和 `Docker Compose`
 
-#### 1、克隆项目到您的本地或服务器
+### 部署项目
 
 ```bash
-// 使用ssh
+# 1、克隆项目到您的本地或服务器
+
+# 使用ssh
 git clone git@github.com:kuaifan/wookteam.git
-// 或者你也可以使用https
+# 或者你也可以使用https
 git clone https://github.com/kuaifan/wookteam.git
 
-// 进入目录
+# 2、进入目录
 cd wookteam
 
-// 拷贝 .env
-cp .env.docker .env
+# 3、一键构建项目
+./cmd install
 ```
 
-#### 2、构建项目
-
-```bash
-./cmd composer install
-./cmd artisan key:generate
-./cmd artisan migrate --seed
-./cmd php bin/wookteam --port=8080 --ssl=4433
-./cmd up -d
-./cmd npm install
-./cmd npm run prod
-./cmd restart
-```
-
-到此安装完毕，项目地址为：**`http://IP:PORT`**（`PORT`为构建项目中的参数`8080`）。
+安装完毕，项目地址为：**`http://IP:PORT`**（`PORT`默认为`8000`）。
 
 ### 更换端口
 
 ```bash
-./cmd php bin/wookteam --port=8080 --ssl=4433
+./cmd php bin/wookteam --port=8000 --ssl=44300
 ./cmd up -d
 ```
 
@@ -83,17 +72,7 @@ cp .env.docker .env
 
 **注意：在升级之前请备份好你的数据！**
 
-- 进入目录，依次运行以下命令：
-
 ```bash
-git fetch --all
-git reset --hard origin/master
-git pull
-./cmd composer update
-./cmd artisan migrate
-
-./cmd npm install
-./cmd npm run prod
-
-./cmd restart
+# 进入目录，运行命令
+./cmd update
 ```

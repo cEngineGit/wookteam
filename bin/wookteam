@@ -22,18 +22,40 @@ class wookteamLoader
         file_put_contents($envPath, $envContent);
         return true;
     }
+
+    function modifyWookteam($type)
+    {
+        $envPath = realpath(__DIR__ . '/../') . DIRECTORY_SEPARATOR . '/docker/php.conf';
+        if (!file_exists($envPath)) {
+            return false;
+        }
+        $envContent = file_get_contents($envPath);
+        $envContent = str_replace("#command=php bin/laravels start -i", "command=php bin/laravels start -i", $envContent);
+        $envContent = str_replace("#command=./bin/inotify ./app", "command=./bin/inotify ./app", $envContent);
+        if ($type == "dev") {
+            $envContent = str_replace("command=php bin/laravels start -i", "#command=php bin/laravels start -i", $envContent);
+        } else {
+            $envContent = str_replace("command=./bin/inotify ./app", "#command=./bin/inotify ./app", $envContent);
+        }
+        file_put_contents($envPath, $envContent);
+        return true;
+    }
 }
 
-$array = getopt('', ['port:', 'ssl:']);
-$data = [];
-if (isset($array['port'])) {
-    $data['APP_PORT'] = $array['port'] ?: '8080';
-}
-if (isset($array['ssl'])) {
-    $data['APP_PORT_SSL'] = $array['ssl'] ?: '4433';
-}
-if ($data) {
-    $loader = new wookteamLoader();
-    $loader->modifyEnv($data);
+$array = getopt('', ['port:', 'ssl:', 'wookteam:']);
+$loader = new wookteamLoader();
+if (isset($array['wookteam'])) {
+    $loader->modifyWookteam($array['wookteam']);
+} else {
+    $data = [];
+    if (isset($array['port'])) {
+        $data['APP_PORT'] = $array['port'] ?: '8000';
+    }
+    if (isset($array['ssl'])) {
+        $data['APP_PORT_SSL'] = $array['ssl'] ?: '44300';
+    }
+    if ($data) {
+        $loader->modifyEnv($data);
+    }
 }
 
